@@ -1,0 +1,32 @@
+<h1>Weather Forecast</h1>
+
+<%= form_tag('/forecast', method: 'get') do %>
+  <%= label_tag :address, 'Enter Address:' %>
+  <%= text_field_tag :address, @address %>
+  <%= submit_tag 'Get Forecast' %>
+<% end %>
+
+<% if @empty_address %>
+  <p style="color: blue;"><%= @empty_address %></p>
+<% elsif @forecast %>
+  <% if @from_cache %>
+    <p>Forecast data retrieved from cache.</p>
+  <% end %>
+
+  <p><strong>Address:</strong> <%= @address %></p>
+  <p><strong>Current Temperature:</strong> <%= @temperature %>°C</p>
+  <p><strong>High:</strong> <%= @high_temp %>°C</p>
+  <p><strong>Low:</strong> <%= @low_temp %>°C</p>
+
+  <% if @extended_forecast %>
+    <h2>5-Day Forecast</h2>
+    <ul>
+      <% @extended_forecast.each do |day| %>
+        <li><%= day[:date] %>: <%= day[:temp] %>°C - <%= day[:description] %></li>
+      <% end %>
+    </ul>
+  <% end %>
+
+<% elsif @error_message %>
+  <p style="color: red;"><%= @error_message %></p>
+<% end %>
